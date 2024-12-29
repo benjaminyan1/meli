@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
             <li className="nav-item">
               <a
                 className="nav-link"
-                href="https://github.com/kevinmao660/meli/"
+                href="https://github.com/benjaminyan1/meli/"
               >
                 Github
               </a>
