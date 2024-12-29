@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = '__all__'
+        fields = ['id', 'title', 'year', 'imdb_id', 'poster', 'last_updated']
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
