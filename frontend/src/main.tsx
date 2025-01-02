@@ -6,6 +6,7 @@ import Navbar from "./Navbar";
 import Login from "./Login";
 import Register from "./Register";
 import Auth from "./Auth";
+import Profile from "./Profile";
 
 const rootElement = document.getElementById("app");
 if (rootElement) {
@@ -18,6 +19,7 @@ if (rootElement) {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/profile" element={<Profile />} />
           <Route
             path="/"
             element={
