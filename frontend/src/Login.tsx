@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Login: React.FC = () => {
@@ -7,28 +8,23 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const navigate = useNavigate(); // React Router hook for navigation
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
 
-    // Basic validation
-    if (username.length < 3 || password.length < 6) {
-      setError(
-        "Username must be at least 3 characters and password at least 6 characters."
-      );
-      return;
-    }
-
     try {
-      const response = await axios.post("http://localhost:8000/api/login/", {
+      const response = await axios.post("http://localhost:8000/api/token/", {
         username,
         password,
       });
       if (response.status === 200) {
         setSuccess(true);
-        setUsername(""); // Reset fields
+        setUsername("");
         setPassword("");
+        // Redirect or handle success logic here
       }
     } catch (err: any) {
       if (axios.isAxiosError(err) && err.response) {
@@ -42,33 +38,50 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Login</h2>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">
+            Username
+          </label>
           <input
-            id="username"
             type="text"
+            className="form-control"
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
           <input
-            id="password"
             type="password"
+            className="form-control"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        <button type="submit">Login</button>
+        {error && <p className="text-danger">{error}</p>}
+        {success && <p className="text-success">Login successful!</p>}
+        <button type="submit" className="btn btn-primary w-100">
+          Login
+        </button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>Login successful!</p>}
+      <div className="text-center mt-3">
+        <p>New User?</p>
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => navigate("/register")}
+        >
+          Register
+        </button>
+      </div>
     </div>
   );
 };
