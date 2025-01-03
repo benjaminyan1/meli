@@ -103,26 +103,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
-# Add these at the top of your settings.py
-from os import getenv
-from dotenv import load_dotenv
 from decouple import config
+import dj_database_url
 
-# SECRET_KEY = config('SECRET_KEY')
-# DEBUG = config('DEBUG', default=False, cast=bool)
+# Retrieve the DATABASE_URL from environment variables
+DATABASE_URL = config('DATABASE_URL', default='')
 
-# Replace the DATABASES section of your settings.py with this
-tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+# Check if DATABASE_URL is provided
+if not DATABASE_URL:
+    raise ValueError("The DATABASE_URL environment variable is not set or is empty.")
 
+# Parse the database URL and set up the DATABASES setting
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': tmpPostgres.path.replace('/', ''),
-        'USER': tmpPostgres.username,
-        'PASSWORD': tmpPostgres.password,
-        'HOST': tmpPostgres.hostname,
-        'PORT': 5432,
-    }
+    'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
 }
 
 # Password validation
