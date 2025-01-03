@@ -103,21 +103,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
-from decouple import config
-import dj_database_url
+tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
-# Retrieve the DATABASE_URL from environment variables
-DATABASE_URL = config('DATABASE_URL', default='')
-
-# Check if DATABASE_URL is provided
-if not DATABASE_URL:
-    raise ValueError("The DATABASE_URL environment variable is not set or is empty.")
-
-# Parse the database URL and set up the DATABASES setting
 DATABASES = {
-    'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': 5432,
+    }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
